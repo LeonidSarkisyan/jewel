@@ -2,7 +2,7 @@ def search_cities_from_file(city_substring: str):
     cities = []
     limit = 5
     index = 0
-    with open("weather/cities.txt", encoding="utf-8") as file:
+    with open("cities.txt", encoding="utf-8") as file:
         for row in file:
             if index != limit:
                 if city_substring.lower() in row.strip().lower():
@@ -18,7 +18,7 @@ def get_cities(skip: int = 0, limit: int = 5):
         raise ValueError("Пропуск или лимит не должен быть меньше нуля!")
     cities = []
     index = 0
-    with open("weather/cities.txt", encoding="utf-8") as file:
+    with open("cities.txt", encoding="utf-8") as file:
         for row in file:
             if skip == 0:
                 if index != limit:
