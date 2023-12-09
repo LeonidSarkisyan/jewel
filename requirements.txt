@@ -1,0 +1,12 @@
+aiogram~=3.1.1
+sqlalchemy~=2.0.23
+aiomysql
+python-dotenv~=1.0.0
+requests~=2.31.0
+openai
+gigachat~=0.1.8
+selenium~=4.15.2
+pillow
+pywin32
+bs4~=0.0.1
+beautifulsoup4~=4.12.2
