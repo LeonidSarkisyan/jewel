@@ -1,3 +1,4 @@
+import random
 import time
 
 from selenium import webdriver
@@ -7,13 +8,10 @@ from selenium.webdriver.chrome.service import Service
 def check_product_ozon(links: list[dict[str, str]]) -> list[dict[str, str]]:
     options = webdriver.ChromeOptions()
     options.add_argument("--disable-blink-features=AutomationControlled")
-    user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2'
-    options.add_argument("--headless")
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument(f'user-agent={user_agent}')
     s = Service()
-    driver = webdriver.Chrome(service=s, options=options)
+    driver = webdriver.Chrome(
+        service=s, options=options
+    )
 
     driver.execute_cdp_cmd(
         "Page.addScriptToEvaluateOnNewDocument", {
@@ -32,7 +30,9 @@ def check_product_ozon(links: list[dict[str, str]]) -> list[dict[str, str]]:
         driver.maximize_window()
         for url in links:
             driver.get(url["link"])
+            driver.save_screenshot(f"{random.randint(1, 10000)}.png")
             sum_detected = detect_words(driver, words)
+            print(f"SUM - {sum_detected}")
             if sum_detected > 1:
                 checked_links.append(url)
     except Exception as ex:

@@ -38,6 +38,7 @@ async def get_photo_and_send_links(message: Message, bot: Bot, state: FSMContext
         await state.clear()
         filename = await save_photo(message, bot)
         links = gem_service.get_links_by_photo(filename)
+        print(links)
         media = []
         for link in links:
             photo = URLInputFile(url=link["image_link"])

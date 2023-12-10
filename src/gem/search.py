@@ -35,9 +35,12 @@ def init_browser() -> webdriver.Chrome:
     options.add_argument("--headless")
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
+    options.add_argument("--window-size=1920,1080")
     user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2'
     options.add_argument(f'user-agent={user_agent}')
-    browser = webdriver.Chrome(options=options)
+    browser = webdriver.Chrome(
+        options=options
+    )
     return browser
 
 
@@ -162,12 +165,14 @@ def get_similar_links(url_image: str, limit: int = 5):
     try_search(browser)
     try_yandex_search(browser)
     time.sleep(2)
+    browser.save_screenshot('screenie.png')
     try:
         links = collect_data_new(browser)
     except NoSuchElementException:
         return []
     else:
         product_links = get_product_links(links)
+        print("ВСЕ ЛИНКИ:", product_links)
         checked_links = check_product_ozon(product_links)
         checked_links_limited = checked_links[:5] if len(checked_links) > 5 else checked_links
         return checked_links_limited
