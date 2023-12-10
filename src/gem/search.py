@@ -35,7 +35,7 @@ def init_browser() -> webdriver.Chrome:
     options.add_argument("--headless")
     options.add_argument('--no-sandbox')
     options.add_argument("--window-size=1920,1080")
-    user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
+    user_agent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)"
     options.add_argument(f'user-agent={user_agent}')
     browser = webdriver.Chrome(
         options=options
