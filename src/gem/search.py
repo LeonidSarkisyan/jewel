@@ -51,6 +51,7 @@ def get_started_yandex(browser: webdriver.Chrome):
             yandex_default_element = browser.find_element("xpath", yandex_default_x_path)
             yandex_default_element.click()
         except (ElementNotInteractableException, NoSuchElementException):
+            print("Загружается...")
             continue
         else:
             break
@@ -82,6 +83,7 @@ def try_yandex_search(browser: webdriver.Chrome):
         try:
             yandex_input_search_element = browser.find_element("xpath", yandex_input_search_x_path)
         except NoSuchElementException:
+            print("Пробуем яндекс...")
             continue
         else:
             yandex_input_search_element.click()
@@ -106,6 +108,7 @@ def collect_data(browser: webdriver.Chrome) -> list[str]:
                 try:
                     rows = search_result_list_element.find_elements("class name", "JustifierRowLayout-Row")
                 except StaleElementReferenceException:
+                    print("Беру картинки")
                     continue
                 else:
                     for row in rows:
@@ -159,10 +162,15 @@ def get_product_links(links: list[dict[str, str]]) -> list[dict[str, str]]:
 
 
 def get_similar_links(url_image: str, limit: int = 5):
+    print("НАЧИНАЕМ ПАРСИНГ")
     browser = init_browser()
+    print("ЗАПУСКАЮ ЯНДЕКС")
     get_started_yandex(browser)
+    print("ВВОЖУ ДАННЫЕ URL IMAGE")
     photo_prepared(browser, url_image)
+    print("ВВОЖУ ДАННЫЕ URL IMAGE")
     try_search(browser)
+    print("ПРОБУЕМ ЯНДЕКС ПОИСК")
     try_yandex_search(browser)
     time.sleep(2)
     browser.save_screenshot('screenie.png')
