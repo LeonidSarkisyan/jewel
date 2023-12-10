@@ -7,6 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, \
     ElementNotInteractableException, StaleElementReferenceException
+from selenium.webdriver.chrome.service import Service
 
 from fake_useragent import UserAgent
 
@@ -29,20 +30,15 @@ search_results_list_x_path = "/html/body/div[4]/div[1]/div/div/div[1]/div/div/di
 
 def init_browser() -> webdriver.Chrome:
     options = webdriver.ChromeOptions()
-    options.add_argument("start-maximized")
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option('useAutomationExtension', False)
+    options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--headless")
-    options.add_argument('--no-sandbox')
-    options.add_argument("--window-size=1920,1080")
-
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
-    user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.4 (KHTML, like Gecko; Google Web Preview) Chrome/22.0.1229 Safari/537.4'
-    options.add_argument(f'user-agent={user_agent}')
-    browser = webdriver.Chrome(
-        options=options
+    options.add_argument(f"user-agent={UserAgent.random}")
+    s = Service()
+    driver = webdriver.Chrome(
+        service=s, options=options
     )
-    browser.execute_cdp_cmd(
+
+    driver.execute_cdp_cmd(
         "Page.addScriptToEvaluateOnNewDocument", {
             'source': """
             delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
@@ -54,7 +50,7 @@ def init_browser() -> webdriver.Chrome:
         """
         }
     )
-    return browser
+    return driver
 
 
 def get_started_yandex(browser: webdriver.Chrome):
