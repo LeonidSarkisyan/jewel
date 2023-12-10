@@ -54,6 +54,13 @@ def init_browser() -> webdriver.Chrome:
         """
         }
     )
+    browser.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+        "source": """
+              const newProto = navigator.__proto__
+              delete newProto.webdriver
+              navigator.__proto__ = newProto
+              """
+    })
     return browser
 
 
