@@ -52,6 +52,7 @@ def get_started_yandex(browser: webdriver.Chrome):
             yandex_default_element.click()
         except (ElementNotInteractableException, NoSuchElementException):
             print("Загружается...")
+            browser.save_screenshot("yandex_screenshot.png")
             continue
         else:
             break
