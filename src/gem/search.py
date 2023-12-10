@@ -34,10 +34,10 @@ def init_browser() -> webdriver.Chrome:
     options.add_experimental_option('useAutomationExtension', False)
     options.add_argument("--headless")
     options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
     options.add_argument("--window-size=1920,1080")
 
-    user_agent = 'Mozilla/5.0 (CentOS 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
+    user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.4 (KHTML, like Gecko; Google Web Preview) Chrome/22.0.1229 Safari/537.4'
     options.add_argument(f'user-agent={user_agent}')
     browser = webdriver.Chrome(
         options=options
@@ -54,13 +54,6 @@ def init_browser() -> webdriver.Chrome:
         """
         }
     )
-    browser.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-        "source": """
-              const newProto = navigator.__proto__
-              delete newProto.webdriver
-              navigator.__proto__ = newProto
-              """
-    })
     return browser
 
 
