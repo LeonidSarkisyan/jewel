@@ -3,11 +3,12 @@ import requests
 
 from bs4 import BeautifulSoup
 
-from selenium_stealth import stealth
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, \
     ElementNotInteractableException, StaleElementReferenceException
+
+from fake_useragent import UserAgent
 
 from src.config import YANDEX_IMAGE_SEARCH_URL
 from src.gem.protect import check_product_ozon
@@ -31,6 +32,8 @@ def init_browser() -> webdriver.Chrome:
     options.add_argument("start-maximized")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
+    user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2'
+    options.add_argument(f'user-agent={user_agent}')
     browser = webdriver.Chrome(options=options)
     return browser
 

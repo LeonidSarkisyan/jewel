@@ -4,6 +4,8 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.media_group import MediaGroupBuilder
 
+from fake_useragent import UserAgent
+
 from src.utils.files import save_photo
 from src.utils.messages import MAIN_GEM_MESSAGE, ASK_GEM_PHOTO_MESSAGE
 from src.keyboards.gem import get_main_gem_main_keyboard, get_list_links
