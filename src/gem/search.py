@@ -36,7 +36,8 @@ def init_browser() -> webdriver.Chrome:
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument("--window-size=1920,1080")
-    options.add_argument(f'user-agent={UserAgent.random}')
+    user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2'
+    options.add_argument(f'user-agent={user_agent}')
     browser = webdriver.Chrome(
         options=options
     )
