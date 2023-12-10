@@ -31,6 +31,7 @@ search_results_list_x_path = "/html/body/div[4]/div[1]/div/div/div[1]/div/div/di
 def init_browser() -> webdriver.Chrome:
     options = webdriver.ChromeOptions()
     options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("--headless")
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument(f"user-agent={UserAgent.random}")
