@@ -41,6 +41,18 @@ def init_browser() -> webdriver.Chrome:
     browser = webdriver.Chrome(
         options=options
     )
+    browser.execute_cdp_cmd(
+        "Page.addScriptToEvaluateOnNewDocument", {
+            'source': """
+            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
+            delete window.cdc_adoQpoasnfa76pfcZLmcfl_JSON;
+            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Object;
+            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
+            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Proxy;
+            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;
+        """
+        }
+    )
     return browser
 
 
