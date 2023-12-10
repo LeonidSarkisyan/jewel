@@ -40,7 +40,7 @@ def init_browser() -> webdriver.Chrome:
         service=s, options=options
     )
 
-    driver.execute_cdp_cmd(
+    result = driver.execute_cdp_cmd(
         "Page.addScriptToEvaluateOnNewDocument", {
             'source': """
             delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
@@ -52,6 +52,9 @@ def init_browser() -> webdriver.Chrome:
         """
         }
     )
+
+    print(f"result: {result}")
+
     return driver
 
 
