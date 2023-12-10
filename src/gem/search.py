@@ -7,7 +7,6 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, \
     ElementNotInteractableException, StaleElementReferenceException
-from selenium.webdriver.chrome.service import Service
 
 from fake_useragent import UserAgent
 
@@ -30,27 +29,18 @@ search_results_list_x_path = "/html/body/div[4]/div[1]/div/div/div[1]/div/div/di
 
 def init_browser() -> webdriver.Chrome:
     options = webdriver.ChromeOptions()
-    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("start-maximized")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
     options.add_argument("--headless")
-    options.add_argument(f"user-agent={UserAgent.random}")
-    s = Service()
-    driver = webdriver.Chrome(
-        service=s, options=options
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument("--window-size=1920,1080")
+    options.add_argument(f'user-agent={UserAgent.random}')
+    browser = webdriver.Chrome(
+        options=options
     )
-
-    driver.execute_cdp_cmd(
-        "Page.addScriptToEvaluateOnNewDocument", {
-            'source': """
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_JSON;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Object;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Proxy;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;
-        """
-        }
-    )
-    return driver
+    return browser
 
 
 def get_started_yandex(browser: webdriver.Chrome):
