@@ -8,6 +8,7 @@ def check_product_ozon(links: list[dict[str, str]]) -> list[dict[str, str]]:
     options = webdriver.ChromeOptions()
     options.add_argument("--disable-blink-features=AutomationControlled")
     user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2'
+    options.add_argument("--headless")
     options.add_argument(f'user-agent={user_agent}')
     s = Service()
     driver = webdriver.Chrome(service=s, options=options)

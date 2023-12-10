@@ -32,6 +32,7 @@ def init_browser() -> webdriver.Chrome:
     options.add_argument("start-maximized")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
+    options.add_argument("--headless")
     user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2'
     options.add_argument(f'user-agent={user_agent}')
     browser = webdriver.Chrome(options=options)
