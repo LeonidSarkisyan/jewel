@@ -3,11 +3,14 @@ import time
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from fake_useragent import UserAgent
 
 
 def check_product_ozon(links: list[dict[str, str]]) -> list[dict[str, str]]:
     options = webdriver.ChromeOptions()
     options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("--headless")
+    options.add_argument(f"user-agent={UserAgent.random}")
     s = Service()
     driver = webdriver.Chrome(
         service=s, options=options
@@ -30,7 +33,6 @@ def check_product_ozon(links: list[dict[str, str]]) -> list[dict[str, str]]:
         driver.maximize_window()
         for url in links:
             driver.get(url["link"])
-            driver.save_screenshot(f"{random.randint(1, 10000)}.png")
             sum_detected = detect_words(driver, words)
             print(f"SUM - {sum_detected}")
             if sum_detected > 1:
