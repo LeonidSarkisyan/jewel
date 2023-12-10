@@ -11,6 +11,3 @@ def load_image_and_get_url(filename: str) -> str:
         "album": ALBUM_ID
     })
     return response.json()["data"]["link"]
-
-
-load_image_and_get_url("../../photo_2023-12-05_18-35-51.jpg")

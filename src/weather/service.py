@@ -55,5 +55,3 @@ class InvalidCoords(Exception):
 
 
 weather_service = OpenWeatherService(WEATHER_URL, WEATHER_API_KEY)
-
-print(weather_service.get_weather_by_city("Пудож"))

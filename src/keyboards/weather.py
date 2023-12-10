@@ -1,6 +1,6 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 
-from src.weather.russian_cities import get_cities,search_cities_from_file
+from src.weather.russian_cities import get_cities, search_cities_from_file
 
 
 #  weather

@@ -10,3 +10,5 @@ pillow
 pywin32
 bs4~=0.0.1
 beautifulsoup4~=4.12.2
+selenium-stealth
+st-undetected-chromedriver

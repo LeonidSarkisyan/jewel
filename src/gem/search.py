@@ -3,12 +3,14 @@ import requests
 
 from bs4 import BeautifulSoup
 
+from selenium_stealth import stealth
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, \
-    ElementNotInteractableException
+    ElementNotInteractableException, StaleElementReferenceException
 
 from src.config import YANDEX_IMAGE_SEARCH_URL
+from src.gem.protect import check_product_ozon
 
 
 def get_yandex_image_url(url: str):
@@ -21,12 +23,15 @@ search_button_x_path = "/html/body/div[1]/header/div/div[3]/div[1]/form/button"
 yandex_input_search_x_path = "/html/body/div[1]/div/div[1]/header/form/div[1]/input"
 yandex_button_x_path = "/html/body/div[1]/div/div[1]/header/form/button/div[2]"
 yandex_default_x_path = "/html/body/div[6]/div/div/div[3]/div[3]/a[1]"
+search_results_list_x_path = "/html/body/div[4]/div[1]/div/div/div[1]/div/div/div[2]/div/div/div/div"
 
 
 def init_browser() -> webdriver.Chrome:
-    chrome_options = Options()
-    chrome_options.add_experimental_option("detach", True)
-    browser = webdriver.Chrome(options=chrome_options)
+    options = webdriver.ChromeOptions()
+    options.add_argument("start-maximized")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
+    browser = webdriver.Chrome(options=options)
     return browser
 
 
@@ -36,7 +41,7 @@ def get_started_yandex(browser: webdriver.Chrome):
         try:
             yandex_default_element = browser.find_element("xpath", yandex_default_x_path)
             yandex_default_element.click()
-        except ElementNotInteractableException:
+        except (ElementNotInteractableException, NoSuchElementException):
             continue
         else:
             break
@@ -68,7 +73,6 @@ def try_yandex_search(browser: webdriver.Chrome):
         try:
             yandex_input_search_element = browser.find_element("xpath", yandex_input_search_x_path)
         except NoSuchElementException:
-            print("Пока не загрузилось.")
             continue
         else:
             yandex_input_search_element.click()
@@ -78,13 +82,86 @@ def try_yandex_search(browser: webdriver.Chrome):
             break
 
 
-def get_similar_links(url_image: str):
+product_link_x_path = "/html/body/div[14]/div[2]/div/div/div/div[3]/div/div/div[3]/div/div/div[1]/div[1]/div[1]/a"
+
+
+def collect_data(browser: webdriver.Chrome) -> list[str]:
+    result_links = []
+    while True:
+        try:
+            search_result_list_element = browser.find_element("xpath", search_results_list_x_path)
+        except NoSuchElementException:
+            pass
+        else:
+            while True:
+                try:
+                    rows = search_result_list_element.find_elements("class name", "JustifierRowLayout-Row")
+                except StaleElementReferenceException:
+                    continue
+                else:
+                    for row in rows:
+                        items = row.find_elements("class name", "JustifierRowLayout-Item")
+                        for item in items:
+                            item.click()
+                            while True:
+                                try:
+                                    product_link_element = browser.find_element("xpath", product_link_x_path)
+                                    link = product_link_element.get_attribute("href")
+                                    result_links.append(link)
+                                    close_button = browser.find_element("class name", "MMViewerModal-Close")
+                                    close_button.click()
+                                except NoSuchElementException:
+                                    print("Ссылка на продукт пока не загружена")
+                                else:
+                                    break
+                    break
+            break
+    return result_links
+
+
+def collect_data_new(browser: webdriver.Chrome, limit: int = 20) -> list[dict[str, str]]:
+    links = []
+    first_image = browser.find_element("class name", "SimpleImage-Image")
+    first_image.click()
+    items = browser.find_elements("class name", "MMGallery-Item")
+
+    for index, item in enumerate(items):
+        if index < 20:
+            item.click()
+            link = (
+                browser.find_element("class name", "MMOrganicSnippet-TitleWrap")
+                .find_element("tag name", "a").get_attribute("href")
+            )
+            image_link = browser.find_element("class name", "MMImage-Origin").get_attribute("src")
+
+            links.append({"link": link, "image_link": image_link})
+        else:
+            break
+
+    return links
+
+
+def get_product_links(links: list[dict[str, str]]) -> list[dict[str, str]]:
+    product_links = []
+    for link in links:
+        if "/product/" in link["link"]:
+            product_links.append(link)
+    return product_links
+
+
+def get_similar_links(url_image: str, limit: int = 5):
     browser = init_browser()
     get_started_yandex(browser)
     photo_prepared(browser, url_image)
     try_search(browser)
     try_yandex_search(browser)
-
-
-get_similar_links("https://i7.imageban.ru/out/2023/12/09/701697799ca7d7c51c1bf5a5b172556d.jpg")
-
+    time.sleep(2)
+    try:
+        links = collect_data_new(browser)
+    except NoSuchElementException:
+        return []
+    else:
+        product_links = get_product_links(links)
+        checked_links = check_product_ozon(product_links)
+        checked_links_limited = checked_links[:5] if len(checked_links) > 5 else checked_links
+        return checked_links_limited

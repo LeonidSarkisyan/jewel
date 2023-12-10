@@ -4,7 +4,7 @@ import logging
 from aiogram import Bot, Dispatcher
 
 from src.config import BOT_TOKEN
-from src.routers import systems, base, chat, weather
+from src.routers import systems, base, chat, weather, gem
 
 
 async def start():
@@ -17,7 +17,7 @@ async def start():
 
     dp = Dispatcher()
 
-    routers = [base.router, chat.router, weather.router]
+    routers = [base.router, chat.router, weather.router, gem.router]
 
     for router in routers:
         dp.include_router(router)
