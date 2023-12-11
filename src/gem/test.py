@@ -1,7 +1,15 @@
-import requests
-from bs4 import BeautifulSoup
+import time
+
+from selenium import webdriver
+
+from src.config import YANDEX_IMAGE_SEARCH_URL
 
 
-response = requests.get("https://yandex.ru/images/search?from=tabbar&text=site:ozon.ru")
+options = webdriver.FirefoxOptions()
+options.set_preference("dom.webdriver.enabled", False)
 
-print(response.content1)
+browser = webdriver.Firefox(options=options)
+
+browser.get(YANDEX_IMAGE_SEARCH_URL)
+
+time.sleep(10)

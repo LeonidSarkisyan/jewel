@@ -63,8 +63,8 @@ def init_browser() -> webdriver.Chrome:
             fix_hairline=True,
             )
 
-    # browser.get("https://bot.sannysoft.com/")
-    # time.sleep(100)
+    browser.get("https://bot.sannysoft.com/")
+    time.sleep(100)
     print(res)
     return browser
 
