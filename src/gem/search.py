@@ -3,10 +3,12 @@ import requests
 
 from bs4 import BeautifulSoup
 
+from selenium_stealth import stealth
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, \
     ElementNotInteractableException, StaleElementReferenceException
+from selenium.webdriver.chrome.service import Service
 
 from fake_useragent import UserAgent
 
@@ -29,7 +31,6 @@ search_results_list_x_path = "/html/body/div[4]/div[1]/div/div/div[1]/div/div/di
 
 def init_browser() -> webdriver.Chrome:
     options = webdriver.ChromeOptions()
-    options.add_argument("start-maximized")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
 
@@ -37,8 +38,9 @@ def init_browser() -> webdriver.Chrome:
 
     user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2'
     options.add_argument(f'user-agent={user_agent}')
+    service = Service()
     browser = webdriver.Chrome(
-        options=options
+        options=options, service=service
     )
     res = browser.execute_cdp_cmd(
         "Page.addScriptToEvaluateOnNewDocument", {
@@ -52,6 +54,15 @@ def init_browser() -> webdriver.Chrome:
         """
         }
     )
+    stealth(browser,
+            languages=["en-US", "en"],
+            vendor="Google Inc.",
+            platform="Win32",
+            webgl_vendor="Intel Inc.",
+            renderer="Intel Iris OpenGL Engine",
+            fix_hairline=True,
+            )
+
     browser.get("https://bot.sannysoft.com/")
     time.sleep(100)
     print(res)
