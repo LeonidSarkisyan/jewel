@@ -55,6 +55,8 @@ def init_browser() -> webdriver.Chrome:
         }
     )
     print(res)
+    browser.get("https://bot.sannysoft.com/")
+    browser.save_screenshot("antibot_screenshot.png")
     return browser
 
 
