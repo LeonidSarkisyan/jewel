@@ -37,7 +37,7 @@ def init_browser() -> webdriver.Chrome:
     options.add_argument("--window-size=1920,1080")
 
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
-    user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
+    user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Vivaldi/6.4.3160.34'
     options.add_argument(f'user-agent={user_agent}')
     browser = webdriver.Chrome(
         options=options
