@@ -51,18 +51,12 @@ def init_browser() -> webdriver.Chrome:
             delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
             delete window.cdc_adoQpoasnfa76pfcZLmcfl_Proxy;
             delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;
-        """
-        }
-    )
-
-    browser.execute_script("""
             Object.defineProperty(navigator, 'deviceMemory', {
                  get: () => 8
             });
-            Object.defineProperty(navigator, 'userAgent', {
-                get: () => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
-            });
-    """)
+        """
+        }
+    )
 
     stealth(browser,
             languages=["en-US", "en"],
