@@ -12,3 +12,4 @@ beautifulsoup4~=4.12.2
 selenium-stealth
 st-undetected-chromedriver
 fake_useragent
+playwright

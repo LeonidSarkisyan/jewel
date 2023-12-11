@@ -42,6 +42,19 @@ def init_browser() -> webdriver.Chrome:
     browser = webdriver.Chrome(
         options=options, service=service
     )
+
+    browser.execute_cdp_cmd(
+        "Page.addScriptToEvaluateOnNewDocument", {
+            'source': """
+               Object.defineProperty(navigator, 'deviceMemory', {
+                     get: () => 8
+               });
+               Object.defineProperty(navigator, 'userAgent', {
+                 get: () => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
+               });
+        """
+        })
+
     res = browser.execute_cdp_cmd(
         "Page.addScriptToEvaluateOnNewDocument", {
             'source': """
