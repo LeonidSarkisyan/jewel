@@ -30,18 +30,20 @@ search_results_list_x_path = "/html/body/div[4]/div[1]/div/div/div[1]/div/div/di
 def init_browser() -> webdriver.Chrome:
     options = webdriver.ChromeOptions()
     options.add_argument("start-maximized")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
+    options.add_argument("--headless")
+    options.add_argument('--no-sandbox')
 
     options.add_argument("--disable-blink-features=AutomationControlled")
+
+    options.add_argument("--window-size=1920,1080")
 
     user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2'
     options.add_argument(f'user-agent={user_agent}')
     browser = webdriver.Chrome(
-        options=options,
+        options=options
     )
-    browser.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument',
-                           {"source": "Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3, 4, 5]});"})
-    browser.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
-        "source": "Object.defineProperty(HTMLDivElement.prototype, 'offsetHeight', {get: () => 1});"})
     res = browser.execute_cdp_cmd(
         "Page.addScriptToEvaluateOnNewDocument", {
             'source': """
@@ -54,9 +56,6 @@ def init_browser() -> webdriver.Chrome:
         """
         }
     )
-
-    browser.get("https://bot.sannysoft.com/")
-    time.sleep(100)
     print(res)
     return browser
 
@@ -194,8 +193,6 @@ def get_similar_links(url_image: str, limit: int = 5):
     browser.save_screenshot('screenie.png')
     try:
         links = collect_data_new(browser)
-        browser.close()
-        browser.quit()
     except NoSuchElementException:
         return []
     else:
