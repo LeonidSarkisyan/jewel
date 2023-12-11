@@ -54,6 +54,16 @@ def init_browser() -> webdriver.Chrome:
         """
         }
     )
+
+    browser.execute_script("""
+            Object.defineProperty(navigator, 'deviceMemory', {
+                 get: () => 8
+            });
+            Object.defineProperty(navigator, 'userAgent', {
+                get: () => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
+            });
+    """)
+
     stealth(browser,
             languages=["en-US", "en"],
             vendor="Google Inc.",
@@ -62,13 +72,6 @@ def init_browser() -> webdriver.Chrome:
             renderer="Intel Iris OpenGL Engine",
             fix_hairline=True,
             )
-
-    browser.execute_script("Object.defineProperty(navigator, 'deviceMemory', {\n" +
-                     "                 get: () => 8\n" +
-                     "           });\n" +
-                     "           Object.defineProperty(navigator, 'userAgent', {\n" +
-                     "             get: () => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'\n" +
-                     "           });")
 
     time.sleep(2)
     browser.get("https://bot.sannysoft.com/")
