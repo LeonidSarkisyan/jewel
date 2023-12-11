@@ -43,6 +43,16 @@ def init_browser() -> webdriver.Chrome:
         options=options, service=service
     )
 
+    stealth(browser,
+            user_agent=user_agent,
+            languages=["en-US", "en"],
+            vendor="Google Inc.",
+            platform="Win32",
+            webgl_vendor="Intel Inc.",
+            renderer="Intel Iris OpenGL Engine",
+            fix_hairline=True,
+            )
+
     browser.execute_cdp_cmd(
         "Page.addScriptToEvaluateOnNewDocument", {
             'source': """
@@ -67,16 +77,6 @@ def init_browser() -> webdriver.Chrome:
         """
         }
     )
-
-    stealth(browser,
-            user_agent=user_agent,
-            languages=["en-US", "en"],
-            vendor="Google Inc.",
-            platform="Win32",
-            webgl_vendor="Intel Inc.",
-            renderer="Intel Iris OpenGL Engine",
-            fix_hairline=True,
-            )
 
     time.sleep(2)
     browser.get("https://bot.sannysoft.com/")
