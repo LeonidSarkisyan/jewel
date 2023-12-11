@@ -50,6 +50,9 @@ def init_browser() -> webdriver.Chrome:
         """
         }
     )
+
+    browser.get("https://bot.sannysoft.com/")
+    time.sleep(100)
     print(res)
     return browser
 

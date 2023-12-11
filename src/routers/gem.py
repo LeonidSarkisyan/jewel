@@ -43,7 +43,10 @@ async def get_photo_and_send_links(message: Message, bot: Bot, state: FSMContext
         for link in links:
             photo = URLInputFile(url=link["image_link"])
             media.append(InputMediaPhoto(type="photo", media=photo))
-        await message.answer_media_group(media)
-        await message.answer("Полученные ссылки:", reply_markup=get_list_links(links))
+        if media:
+            await message.answer_media_group(media)
+            await message.answer("Полученные ссылки:", reply_markup=get_list_links(links))
+        else:
+            await message.answer("Ничего не найдено  ❌")
     else:
         await message.answer("Отправьте фотографию!")
