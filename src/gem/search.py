@@ -29,14 +29,12 @@ search_results_list_x_path = "/html/body/div[4]/div[1]/div/div/div[1]/div/div/di
 
 def init_browser() -> webdriver.Chrome:
     options = webdriver.ChromeOptions()
+    options.add_argument("start-maximized")
 
     options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument('start-maximized')
-    options.add_argument("--headless")
-    options.add_argument('--no-sandbox')
-    user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
-    options.add_argument(f'user-agent={user_agent}')
 
+    user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2'
+    options.add_argument(f'user-agent={user_agent}')
     browser = webdriver.Chrome(
         options=options
     )
@@ -53,10 +51,6 @@ def init_browser() -> webdriver.Chrome:
         }
     )
     print(res)
-    browser.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-
-    browser.get("https://bot.sannysoft.com/")
-    browser.save_screenshot("antibot_screenshot.png")
     return browser
 
 
@@ -193,6 +187,8 @@ def get_similar_links(url_image: str, limit: int = 5):
     browser.save_screenshot('screenie.png')
     try:
         links = collect_data_new(browser)
+        browser.close()
+        browser.quit()
     except NoSuchElementException:
         return []
     else:
