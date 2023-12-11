@@ -58,6 +58,13 @@ def init_browser() -> webdriver.Chrome:
         }
     )
 
+    browser.execute_script("Object.defineProperty(navigator, 'deviceMemory', {\n" +
+                     "                 get: () => 8\n" +
+                     "           });\n" +
+                     "           Object.defineProperty(navigator, 'userAgent', {\n" +
+                     "             get: () => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2'\n" +
+                     "           });")
+
     stealth(browser,
             languages=["en-US", "en"],
             vendor="Google Inc.",
