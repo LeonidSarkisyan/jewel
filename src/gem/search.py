@@ -34,7 +34,7 @@ def init_browser() -> webdriver.Chrome:
     options.add_argument('start-maximized')
     options.add_argument("--headless")
     options.add_argument('--no-sandbox')
-    user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2'
+    user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
     options.add_argument(f'user-agent={user_agent}')
 
     browser = webdriver.Chrome(
